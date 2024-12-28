@@ -11,6 +11,9 @@ configure :development do
   enable :reloader
 end
 
-get '/' do
-  'Hello world!!'
+post '/chat' do
+  content_type :json
+  request_payload = JSON.parse(request.body.read)
+  status 200
+  puts request_payload
 end

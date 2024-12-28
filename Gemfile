@@ -1,10 +1,11 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem "sinatra"
-gem "json"
-gem "httparty"
-gem "dotenv"
+source 'https://rubygems.org'
 
+gem 'dotenv'
+gem 'httparty'
+gem 'json'
+gem 'sinatra'
 
-gem "sinatra-reloader", require: false
-gem "rubocop", require: false
+gem 'rubocop', require: false
+gem 'sinatra-reloader', require: false

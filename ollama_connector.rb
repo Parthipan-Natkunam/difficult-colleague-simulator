@@ -1,0 +1,44 @@
+# frozen_string_literal: true
+
+require 'httparty'
+require 'json'
+require 'dotenv/load'
+
+class OllamaConnector
+  OLLAMA_SERVER_URL = ENV['OLLAMA_URL']
+  AI_MODEL = ENV['AI_MODEL']
+
+  def self.send_message(message)
+    body_payload = build_body(message)
+    response = HTTParty.post(
+      OLLAMA_SERVER_URL,
+      body: body_payload,
+      headers: { 'Content-Type' => 'application/json' },
+      format: :json
+    )
+    return response['message']['content'] if response['message'] && response['message']['content']
+
+    raise 'Invalid response from the Model'
+  end
+
+  def self.format_message(message)
+    [
+      {
+        role: 'system',
+        content: 'You are a colleague of the user who disagrees a lot. Role play this conversation.'
+      },
+      {
+        role: 'user',
+        content: message
+      }
+    ]
+  end
+
+  def self.build_body(message)
+    {
+      model: AI_MODEL,
+      stream: false,
+      messages: format_message(message)
+    }.to_json
+  end
+end

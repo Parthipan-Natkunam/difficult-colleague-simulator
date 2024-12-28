@@ -33,25 +33,24 @@ class OllamaConnector
     raise 'Invalid response from the Model'
   end
 
-  private  
-    def self.format_message(message)
-      [
-        *@@message_history,
-      ]
-    end
+  def self.format_message(_message)
+    [
+      *@@message_history
+    ]
+  end
 
-    def self.build_body(message)
-      {
-        model: AI_MODEL,
-        stream: false,
-        messages: format_message(message)
-      }.to_json
-    end
+  def self.build_body(message)
+    {
+      model: AI_MODEL,
+      stream: false,
+      messages: format_message(message)
+    }.to_json
+  end
 
-    def self.add_to_history(message, role)
-      @@message_history << {
-        role: role,
-        content: message
-      }
-    end
+  def self.add_to_history(message, role)
+    @@message_history << {
+      role: role,
+      content: message
+    }
+  end
 end

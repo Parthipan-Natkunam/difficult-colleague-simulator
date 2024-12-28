@@ -1,0 +1,36 @@
+# Ignore bundler config
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+
+# Ignore other unneeded files
+*.rbc
+*.sassc
+.sass-cache
+/config/config.yml
+/config/database.yml
+/config/secrets.yml
+/config/application.yml
+
+# Ignore system files
+.DS_Store
+*.swp
+*~
+
+# Ignore coverage reports
+/coverage/
+
+# Ignore node_modules
+/node_modules/
+
+# Ignore byebug command history file.
+/.byebug_history
+
+# Ignore dotenv environment variables file
+.env

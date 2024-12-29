@@ -14,8 +14,8 @@ class IncomingMessageHandler
   end
 
   def self.get_user_id(payload)
-    team_id = payload['authorizations'][0]['team_id']
-    user_id = payload['authorizations'][0]['user_id']
+    team_id = payload['team_id']
+    user_id = payload['event']['user']
     "#{team_id}_#{user_id}"
   end
 

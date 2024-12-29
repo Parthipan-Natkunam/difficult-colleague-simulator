@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class CommandHandler
-  REGISTERED_COMMANDS = ['RESET_HISTORY', 'DEBUG_HISTORY']
+  REGISTERED_COMMANDS = %w[RESET_HISTORY DEBUG_HISTORY].freeze
 
   def self.is_command?(message)
     REGISTERED_COMMANDS.include?(message)

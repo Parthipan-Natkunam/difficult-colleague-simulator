@@ -30,9 +30,9 @@ end
 
 post '/chat' do
   content_type :json
-  
+
   request.body.rewind
-  
+
   data = JSON.parse(request.body.read)
 
   return { challenge: data['challenge'] }.to_json if data['challenge']
@@ -45,7 +45,7 @@ post '/chat' do
     unless is_bot_message
       user_id = IncomingMessageHandler.get_user_id(data)
 
-      if CommandHandler.is_command? message 
+      if CommandHandler.is_command? message
         CommandHandler.handle_command(message, user_id)
         return
       end

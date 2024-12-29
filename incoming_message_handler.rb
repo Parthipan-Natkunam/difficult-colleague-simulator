@@ -6,11 +6,15 @@ class IncomingMessageHandler
   end
 
   def self.is_bot_message(payload)
-    payload['event']['subtype'] == 'bot_message'
+    !payload['event']['subtype'].nil?
   end
 
   def self.get_parent_message_id(payload)
     payload['event']['ts']
+  end
+
+  def self.get_user_id(payload)
+    payload['event']['user']
   end
 
   def self.get_message(payload)

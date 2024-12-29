@@ -43,9 +43,21 @@ post '/chat' do
         return
       end
 
+      user_id = IncomingMessageHandler.get_user_id(data)
+
+      if message == 'DEBUG_HISTORY'
+        user_messages = Message.where(user_id: user_id)
+        system_message = Message.find_by(role: 'system')
+        all_messages = [system_message] + user_messages
+        SlackBot.send_debug_message(all_messages)
+        puts 'Debug message sent'
+        status 200
+        return
+      end
+
       if message && !message.empty?
         parent_message_id = IncomingMessageHandler.get_parent_message_id(data)
-        bot_reply = OllamaConnector.send_message(message)
+        bot_reply = OllamaConnector.send_message(message, user_id)
         sent_status = SlackBot.send_message(bot_reply, parent_message_id, event_type) if bot_reply
         puts "AI reply: #{bot_reply}" if bot_reply
         puts "SLACK BOT Message Status [#{event_type}]: #{sent_status}" if sent_status

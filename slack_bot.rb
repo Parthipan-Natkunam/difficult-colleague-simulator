@@ -19,4 +19,22 @@ class SlackBot
       headers: { 'Content-Type' => 'application/json' }
     )
   end
+
+  def self.send_debug_message(messages)
+    message_blocks = messages.map do |msg|
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: "```#{msg.role.capitalize}  |  #{msg.content}  | #{msg.user_id} |```"
+        }
+      }
+    end
+
+    HTTParty.post(
+      ENV['SLACK_DM_WEBHOOK_URL'],
+      body: { blocks: message_blocks }.to_json,
+      headers: { 'Content-Type' => 'application/json' }
+    )
+  end
 end

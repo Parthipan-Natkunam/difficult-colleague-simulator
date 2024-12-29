@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'httparty'
-require 'json'
-require 'dotenv/load'
 
 class SlackBot
   def self.send_message(message, parent_message_id, type)

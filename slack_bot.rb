@@ -5,13 +5,17 @@ require 'json'
 require 'dotenv/load'
 
 class SlackBot
-  WEBHOOK_URL = ENV['SLACK_WEBHOOK_URL']
-
-  def self.send_message(message, parent_message_id)
+  def self.send_message(message, parent_message_id, type)
     message_to_send = message || 'Sorry, I couldn\'t understand that, could you please rephrase it?'
+
+    payload = { text: message_to_send }
+    payload[:thread_ts] = parent_message_id if type == 'app_mention'
+
+    web_hook_url = type == 'app_mention' ? ENV['SLACK_MENTION_WEBHOOK_URL'] : ENV['SLACK_DM_WEBHOOK_URL']
+
     HTTParty.post(
-      WEBHOOK_URL,
-      body: { text: message_to_send, thread_ts: parent_message_id }.to_json,
+      web_hook_url,
+      body: payload.to_json,
       headers: { 'Content-Type' => 'application/json' }
     )
   end

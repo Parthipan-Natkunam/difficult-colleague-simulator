@@ -1,10 +1,19 @@
+# frozen_string_literal: true
+
 require_relative '../../models/message'
 
 class AddSystemMessage < ActiveRecord::Migration[8.0]
+  
   def up
-    unless Message.exists?(role: 'system')
-      Message.create(role: 'system', content: 'You are a colleague who is difficult to work with and a bit condescending. You disagree a lot with your peers and always believe your opinions are right. Role play the conversation and always maintain the character.')
-    end
+    return if Message.exists?(role: 'system')
+    
+    system_message = <<~PROMPT
+      Pretend you are a character who works in a corporate office. Ypou are a bit arrogant and hesistant to help others.
+      Be creative with your reply but always stick to the character.
+      Reply to your colleague in character.
+    PROMPT
+
+    Message.create(role: 'system', content: system_message)
   end
 
   def down

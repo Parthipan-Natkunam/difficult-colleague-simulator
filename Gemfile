@@ -5,10 +5,10 @@ source 'https://rubygems.org'
 gem 'dotenv'
 gem 'httparty'
 gem 'json'
-gem 'sinatra'
-gem 'sqlite3'
-gem 'sinatra-activerecord'
 gem 'rake'
+gem 'sinatra'
+gem 'sinatra-activerecord'
+gem 'sqlite3'
 
 group :development do
   gem 'rubocop'

@@ -7,12 +7,12 @@ require 'dotenv/load'
 require 'sinatra/reloader'
 require 'sinatra/activerecord'
 
-require_relative 'ollama_connector'
-require_relative 'incoming_message_handler'
-require_relative 'slack_bot'
-
 require_relative 'middlewares/slack_signature_verification'
+require_relative 'helpers/incoming_message_handler'
 require_relative 'helpers/command_handler'
+
+require_relative 'connectors/ollama_connector'
+require_relative 'connectors/slack_bot'
 
 use SlackSignatureVerification
 

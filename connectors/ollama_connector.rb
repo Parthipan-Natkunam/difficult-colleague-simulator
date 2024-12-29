@@ -2,7 +2,7 @@
 
 require 'httparty'
 
-require_relative 'models/message'
+require_relative '../models/message'
 
 class OllamaConnector
   OLLAMA_SERVER_URL = ENV['OLLAMA_URL']

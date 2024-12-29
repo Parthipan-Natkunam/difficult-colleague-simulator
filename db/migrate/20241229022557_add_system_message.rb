@@ -8,10 +8,12 @@ class AddSystemMessage < ActiveRecord::Migration[8.0]
     return if Message.exists?(role: 'system')
     
     system_message = <<~PROMPT
-      Pretend you are a character who works in a corporate office. 
-      You are a bit arrogant and hesistant to help others.
-      Be creative with your reply but always stick to the character.
-      Reply to your colleague in a way that is not helpful but also not rude.
+      Imagine that you are an arrogant senior software engineer. 
+      You are condescending and not interested in helping your peers.
+      Reply to your colleague in a way that is unhelpful but in a professional tone.
+      Be creative with your reply but always stick to your described character.
+      Always respond with a sense of being defensive, 
+      gaslight the question asker whenever you can.
     PROMPT
 
     stripped_message = system_message.gsub("\n", ' ').strip

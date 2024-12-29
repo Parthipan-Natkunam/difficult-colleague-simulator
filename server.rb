@@ -34,26 +34,22 @@ post '/chat' do
     event_type = IncomingMessageHandler.get_event_type(data)
     is_bot_message = IncomingMessageHandler.is_bot_message(data)
 
-    if message == 'RESET_HISTORY'
-      Message.where(role: 'user').delete_all
-      Message.where(role: 'assistant').delete_all
-      puts 'History has been reset'
-      status 200
-      return
-    end
+    unless is_bot_message
+      if message == 'RESET_HISTORY'
+        Message.where(role: 'user').delete_all
+        Message.where(role: 'assistant').delete_all
+        puts 'History has been reset'
+        status 200
+        return
+      end
 
-    if message == 'SYSTEM_RESET'
-      Message.destroy_all
-      puts 'Complete system reset'
-      status 200
-      return
-    end
-
-    if message && !message.empty? && !is_bot_message
-      parent_message_id = IncomingMessageHandler.get_parent_message_id(data)
-      bot_reply = OllamaConnector.send_message(message)
-      sent_status = SlackBot.send_message(bot_reply, parent_message_id, event_type) if bot_reply
-      puts "SLACK BOT Message Status [#{event_type}]: #{sent_status}" if sent_status
+      if message && !message.empty?
+        parent_message_id = IncomingMessageHandler.get_parent_message_id(data)
+        bot_reply = OllamaConnector.send_message(message)
+        sent_status = SlackBot.send_message(bot_reply, parent_message_id, event_type) if bot_reply
+        puts "AI reply: #{bot_reply}" if bot_reply
+        puts "SLACK BOT Message Status [#{event_type}]: #{sent_status}" if sent_status
+      end
     end
 
     status 200

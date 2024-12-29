@@ -7,8 +7,9 @@ require 'dotenv/load'
 require 'sinatra/reloader'
 
 require_relative 'ollama_connector'
+require_relative 'incoming_message_handler'
 
-set :port, 3000
+set :port, ENV['PORT']
 set :environment, ENV['RACK_ENV']
 
 configure :development do
@@ -26,8 +27,13 @@ post '/chat' do
   return { challenge: data['challenge'] }.to_json if data['challenge']
 
   begin
-    bot_reply = OllamaConnector.send_message(data['message'])
-    { message: bot_reply }.to_json
+    parent_message_id = IncomingMessageHandler.get_parent_message_id(data)
+    message = IncomingMessageHandler.get_message(data)
+    bot_reply = OllamaConnector.send_message(message) if message && !message.empty?
+    puts "Parent message id: #{parent_message_id}"
+    puts "Message: #{message}"
+    { message: bot_reply }.to_json if bot_reply
+    { error: 'No message to send' }.to_json
   rescue StandardError => e
     puts e
     status 500

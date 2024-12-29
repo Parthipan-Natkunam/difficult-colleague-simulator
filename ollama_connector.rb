@@ -18,7 +18,6 @@ class OllamaConnector
   def self.send_message(message)
     add_to_history(message, 'user')
     body_payload = build_body(message)
-    puts "Sending message: #{body_payload}"
     response = HTTParty.post(
       OLLAMA_SERVER_URL,
       body: body_payload,

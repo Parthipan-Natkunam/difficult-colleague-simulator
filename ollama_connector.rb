@@ -4,20 +4,16 @@ require 'httparty'
 require 'json'
 require 'dotenv/load'
 
+require_relative 'models/message'
+
 class OllamaConnector
   OLLAMA_SERVER_URL = ENV['OLLAMA_URL']
   AI_MODEL = ENV['AI_MODEL']
 
-  @@message_history = [
-    {
-      role: 'system',
-      content: 'You are a colleague of the user who disagrees a lot. Role play this conversation.'
-    }
-  ]
-
   def self.send_message(message)
     add_to_history(message, 'user')
     body_payload = build_body(message)
+    puts "Body payload: #{body_payload}"
     response = HTTParty.post(
       OLLAMA_SERVER_URL,
       body: body_payload,
@@ -25,7 +21,7 @@ class OllamaConnector
       format: :json
     )
     if response['message'] && response['message']['content']
-      add_to_history(message, 'assistant')
+      add_to_history(response['message']['content'], 'assistant')
       return response['message']['content']
     end
 
@@ -33,9 +29,7 @@ class OllamaConnector
   end
 
   def self.format_message(_message)
-    [
-      *@@message_history
-    ]
+    Message.all.map { |msg| { role: msg.role, content: msg.content } }
   end
 
   def self.build_body(message)
@@ -47,9 +41,6 @@ class OllamaConnector
   end
 
   def self.add_to_history(message, role)
-    @@message_history << {
-      role: role,
-      content: message
-    }
+    Message.create(role: role, content: message)
   end
 end

@@ -42,15 +42,15 @@ post '/chat' do
     is_bot_message = IncomingMessageHandler.is_bot_message(data)
 
     unless is_bot_message
+      user_id = IncomingMessageHandler.get_user_id(data)
+
       if message == 'RESET_HISTORY'
-        Message.where(role: 'user').delete_all
-        Message.where(role: 'assistant').delete_all
+        Message.where(role: 'user', user_id: user_id).delete_all
+        Message.where(role: 'assistant', user_id: user_id).delete_all
         puts 'History has been reset'
         status 200
         return
       end
-
-      user_id = IncomingMessageHandler.get_user_id(data)
 
       if message == 'DEBUG_HISTORY'
         user_messages = Message.where(user_id: user_id)

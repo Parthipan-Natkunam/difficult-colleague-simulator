@@ -28,7 +28,7 @@ class OllamaConnector
     raise 'Invalid response from the Model'
   end
 
-  def self.format_message(_message)
+  def self.format_message()
     Message.all.map { |msg| { role: msg.role, content: msg.content } }
   end
 
@@ -36,7 +36,7 @@ class OllamaConnector
     {
       model: AI_MODEL,
       stream: false,
-      messages: format_message(message)
+      messages: format_message
     }.to_json
   end
 

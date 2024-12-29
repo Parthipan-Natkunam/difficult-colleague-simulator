@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class IncomingMessageHandler
-  def self.get_parent_message_id (payload)
+  def self.get_parent_message_id(payload)
     payload['event']['ts']
   end
 

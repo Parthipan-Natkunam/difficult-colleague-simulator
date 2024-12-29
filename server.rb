@@ -32,7 +32,9 @@ post '/chat' do
     bot_reply = OllamaConnector.send_message(message) if message && !message.empty?
     puts "Parent message id: #{parent_message_id}"
     puts "Message: #{message}"
-    { message: bot_reply }.to_json if bot_reply
+
+    return { message: bot_reply }.to_json if bot_reply
+
     { error: 'No message to send' }.to_json
   rescue StandardError => e
     puts e

@@ -11,6 +11,10 @@ require_relative 'ollama_connector'
 require_relative 'incoming_message_handler'
 require_relative 'slack_bot'
 
+require_relative 'middlewares/slack_signature_verification'
+
+use SlackSignatureVerification
+
 set :port, ENV['PORT']
 set :environment, :production
 set :database, { adapter: 'sqlite3', database: ENV['DATABASE_URL'] }
@@ -25,6 +29,9 @@ end
 
 post '/chat' do
   content_type :json
+  
+  request.body.rewind
+  
   data = JSON.parse(request.body.read)
 
   return { challenge: data['challenge'] }.to_json if data['challenge']

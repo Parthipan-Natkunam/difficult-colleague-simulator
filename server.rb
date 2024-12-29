@@ -8,6 +8,7 @@ require 'sinatra/reloader'
 
 require_relative 'ollama_connector'
 require_relative 'incoming_message_handler'
+require_relative 'slack_bot'
 
 set :port, ENV['PORT']
 set :environment, ENV['RACK_ENV']
@@ -33,9 +34,9 @@ post '/chat' do
     puts "Parent message id: #{parent_message_id}"
     puts "Message: #{message}"
 
-    return { message: bot_reply }.to_json if bot_reply
-
-    { error: 'No message to send' }.to_json
+    sent_status = SlackBot.send_message(bot_reply, parent_message_id)
+    puts "SLACK BOT Message Status: #{sent_status}"
+    status 200
   rescue StandardError => e
     puts e
     status 500

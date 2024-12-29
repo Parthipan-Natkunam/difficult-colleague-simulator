@@ -12,6 +12,7 @@ require_relative 'incoming_message_handler'
 require_relative 'slack_bot'
 
 require_relative 'middlewares/slack_signature_verification'
+require_relative 'helpers/command_handler'
 
 use SlackSignatureVerification
 
@@ -44,21 +45,8 @@ post '/chat' do
     unless is_bot_message
       user_id = IncomingMessageHandler.get_user_id(data)
 
-      if message == 'RESET_HISTORY'
-        Message.where(role: 'user', user_id: user_id).delete_all
-        Message.where(role: 'assistant', user_id: user_id).delete_all
-        puts 'History has been reset'
-        status 200
-        return
-      end
-
-      if message == 'DEBUG_HISTORY'
-        user_messages = Message.where(user_id: user_id)
-        system_message = Message.find_by(role: 'system')
-        all_messages = [system_message] + user_messages
-        SlackBot.send_debug_message(all_messages)
-        puts 'Debug message sent'
-        status 200
+      if CommandHandler.is_command? message 
+        CommandHandler.handle_command(message, user_id)
         return
       end
 

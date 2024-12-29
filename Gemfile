@@ -6,6 +6,11 @@ gem 'dotenv'
 gem 'httparty'
 gem 'json'
 gem 'sinatra'
+gem 'sqlite3'
+gem 'sinatra-activerecord'
+gem 'rake'
 
-gem 'rubocop', require: false
-gem 'sinatra-reloader', require: false
+group :development do
+  gem 'rubocop'
+  gem 'sinatra-reloader'
+end
